@@ -3,45 +3,43 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-
+use App\Models\Post;
+use App\Models\User;
+use Carbon\Carbon;
 class PostController extends Controller
 {
     // Action Method
     public function index() {
-        $posts = [
-            ['id' => 1, 'title' => 'Learn Laravel', 'posted_by' => 'Ahmed Elshopaky', 'created_at' => '2022-02-20 14:45:00']
-        ];
+        // $posts = [
+        //     ['id' => 1, 'title' => 'Learn Laravel', 'posted_by' => 'Ahmed Elshopaky', 'created_at' => '2022-02-20 14:45:00']
+        // ];
+        $posts = Post::all();
+        $posts = Post::paginate(6);
         return view('posts.index', [
-            // TODO
             'posts' => $posts
         ]);
     }
 
     public function create() {
-        return view('posts.create');
+        $users = User::all();
+        return view('posts.create', compact('users'));
     }
 
-    public function show($post) {
-        $posts = [
-            ['id' => 1, 'title' => 'Learn Laravel', 'posted_by' => 'Ahmed Elshopaky', 'created_at' => '2022-02-20 14:45:00']
-        ];
-        return view('posts.show', [
-            'posts' => $posts
-        ]);
+    public function show($postID) {
+        $post = Post::where('id', $postID)->first();
+        $user = User::where('id', $post->user_id)->first();
+        $date = Carbon::parse($post->created_at)->format('l jS \of F Y h:i:s A');
+        return view('posts.show', compact('post'), compact('user'), compact('date'));
     }
 
-    public function edit($post) {
-        $posts = [
-            ['id' => 1, 'title' => 'Learn Laravel', 'posted_by' => 'Ahmed Elshopaky', 'created_at' => '2022-02-20 14:45:00']
-        ];
-        return view('posts.edit', [
-            'posts' => $posts
-        ]);
+    public function edit($postID) {
+        $post = Post::where('id', $postID)->first();
+        $user = User::where('id', $post->user_id)->first();
+        return view('posts.edit', compact('post'), compact('user'));
     }
 
-    public function destroy($post) {
-        // return $post;
-        
+    public function destroy($postID) {
+        Post::where('id', $postID)->delete();
         return redirect()->route('posts.index');
     }
 
@@ -49,13 +47,17 @@ class PostController extends Controller
         // fetch request data
         $data = request()->all();
         // store in db
-
+        Post::create($data);
         // redirect to index
         return redirect()->route('posts.index');
     }
 
-    public function update($post) {
-        //
+    public function update($postID) {
+        $data = request()->all();
+        Post::where('id', $postID)->update([
+            'title' => $data['title'],
+            'description' => $data['description']
+        ]);
         return redirect()->route('posts.index');
     }
 }
