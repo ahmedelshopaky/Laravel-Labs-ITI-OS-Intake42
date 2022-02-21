@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
-
+use App\Http\Requests\StorePostRequest;
 class PostController extends Controller
 {
     // Action Method
@@ -42,7 +42,14 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function store() {
+    public function store(StorePostRequest $request) {
+        // validation
+        // request()->validate([
+        //     'title' => ['required', 'min:3'],
+        //     'description' => ['required', 'min:10']
+        // ],[
+        //     'title.required' => 'The title is a must.'
+        // ]);
         // fetch request data
         $data = request()->all();
         // store in db
