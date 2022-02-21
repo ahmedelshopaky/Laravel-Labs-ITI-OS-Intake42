@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Post;
 use App\Models\User;
-use Carbon\Carbon;
+
 class PostController extends Controller
 {
     // Action Method
@@ -28,8 +28,7 @@ class PostController extends Controller
     public function show($postID) {
         $post = Post::where('id', $postID)->first();
         $user = User::where('id', $post->user_id)->first();
-        $date = Carbon::parse($post->created_at)->format('l jS \of F Y h:i:s A');
-        return view('posts.show', compact('post'), compact('user'), compact('date'));
+        return view('posts.show', compact('post'), compact('user'));
     }
 
     public function edit($postID) {

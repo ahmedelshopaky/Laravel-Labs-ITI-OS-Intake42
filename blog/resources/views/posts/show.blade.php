@@ -1,3 +1,7 @@
+<?php
+    use Carbon\Carbon;
+    $date = Carbon::parse($user->created_at)->format('l jS \of F Y h:i:s A');
+?>
 @extends('layouts.app')
 @section('title') View Post @endsection
 @section('content')
@@ -29,7 +33,7 @@
                     <p><strong>Email: </strong>{{$user->email}}</p>
                 </div>
                 <div class="card-text">
-                    <p><strong>Created At: </strong>{{$user->created_at}}</p>
+                    <p><strong>Created At: </strong>{{$date}}</p>
                 </div>
             </div>
         </div>
