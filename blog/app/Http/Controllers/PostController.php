@@ -25,20 +25,20 @@ class PostController extends Controller
         return view('posts.create', compact('users'));
     }
 
-    public function show($postID) {
-        $post = Post::where('id', $postID)->first();
+    public function show($slug) {
+        $post = Post::where('slug', $slug)->first();
         $user = User::where('id', $post->user_id)->first();
         return view('posts.show', compact('post'), compact('user'));
     }
 
-    public function edit($postID) {
-        $post = Post::where('id', $postID)->first();
+    public function edit($id) {
+        $post = Post::where('id', $id)->first();
         $user = User::where('id', $post->user_id)->first();
         return view('posts.edit', compact('post'), compact('user'));
     }
 
-    public function destroy($postID) {
-        Post::where('id', $postID)->delete();
+    public function destroy($id) {
+        Post::where('id', $id)->delete();
         return redirect()->route('posts.index');
     }
 
@@ -58,12 +58,20 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function update($postID) {
+    public function update($id, StorePostRequest $request) {
+        // TODO
+        // make sure when updating post without changing Title it still works
+        // Also make sure that no one hacks you and send an id of post
+        // creator that doesn’t exist in the database
+        $post = Post::where('id', $id)->first();
+        $user = User::where('id', $post->user_id)->first();
+
         $data = request()->all();
-        Post::where('id', $postID)->update([
+        $post->update([
             'title' => $data['title'],
             'description' => $data['description']
         ]);
-        return redirect()->route('posts.index');
+
+        return view('posts.show', compact('post'), compact('user'));
     }
 }
