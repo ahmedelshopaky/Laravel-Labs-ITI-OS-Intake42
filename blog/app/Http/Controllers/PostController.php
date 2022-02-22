@@ -50,23 +50,33 @@ class PostController extends Controller
         // ],[
         //     'title.required' => 'The title is a must.'
         // ]);
+
         // fetch request data
-        $data = request()->all();
+        // $data = request()->all();
+        
+        // validate the request data
+        $validated = $request->validated();
         // store in db
-        Post::create($data);
+        Post::create($validated);
         // redirect to index
         return redirect()->route('posts.index');
     }
 
     public function update($slug, StorePostRequest $request) {
+        $validated = $request->validated();
+
         $post = Post::where('slug', $slug)->first();
         $user = User::where('id', $post->user_id)->first();
 
-        $data = request()->all();
-        $post->update([
-            'title' => $data['title'],
-            'description' => $data['description']
-        ]);
+        if ($post) {
+            $post->update($validated);
+        }
+        
+        // $data = request()->all();
+        // $post->update([
+        //     'title' => $data['title'],
+        //     'description' => $data['description']
+        // ]);
 
         return view('posts.show', compact('post'), compact('user'));
     }
