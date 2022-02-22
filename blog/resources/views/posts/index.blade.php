@@ -23,7 +23,7 @@
             <th scope="row">{{$post['id']}}</th>
             <td>{{$post['title']}}</td>
             <td>{{$post->slug}}</td>
-            <td>{{$post->user->name}}</td>
+            <td>{{$post->user ? $post->user->name : 'Not Found'}}</td>
             <td>{{$post['created_at']}}</td>
             <td>
                 <a href="{{route('posts.show',$post['slug'])}}" class="btn btn-info">View</a>
