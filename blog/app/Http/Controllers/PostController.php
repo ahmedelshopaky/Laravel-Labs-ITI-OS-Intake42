@@ -59,10 +59,6 @@ class PostController extends Controller
     }
 
     public function update($slug, StorePostRequest $request) {
-        // TODO
-        // make sure when updating post without changing Title it still works
-        // Also make sure that no one hacks you and send an id of post
-        // creator that doesn’t exist in the database
         $post = Post::where('slug', $slug)->first();
         $user = User::where('id', $post->user_id)->first();
 
