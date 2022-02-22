@@ -31,14 +31,14 @@ class PostController extends Controller
         return view('posts.show', compact('post'), compact('user'));
     }
 
-    public function edit($id) {
-        $post = Post::where('id', $id)->first();
+    public function edit($slug) {
+        $post = Post::where('slug', $slug)->first();
         $user = User::where('id', $post->user_id)->first();
         return view('posts.edit', compact('post'), compact('user'));
     }
 
-    public function destroy($id) {
-        Post::where('id', $id)->delete();
+    public function destroy($slug) {
+        Post::where('slug', $slug)->delete();
         return redirect()->route('posts.index');
     }
 
@@ -58,12 +58,12 @@ class PostController extends Controller
         return redirect()->route('posts.index');
     }
 
-    public function update($id, StorePostRequest $request) {
+    public function update($slug, StorePostRequest $request) {
         // TODO
         // make sure when updating post without changing Title it still works
         // Also make sure that no one hacks you and send an id of post
         // creator that doesn’t exist in the database
-        $post = Post::where('id', $id)->first();
+        $post = Post::where('slug', $slug)->first();
         $user = User::where('id', $post->user_id)->first();
 
         $data = request()->all();

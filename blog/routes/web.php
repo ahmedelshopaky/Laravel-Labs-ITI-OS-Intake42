@@ -26,10 +26,10 @@ Route::post('/posts', [PostController::class, 'store'])->name('posts.store')->mi
 
 Route::get('/posts/{slug}', [PostController::class, 'show'])->name('posts.show')->middleware('auth');
 
-Route::get('/posts/{id}/edit', [PostController::class, 'edit'])->name('posts.edit')->middleware('auth');
-Route::put('/posts/{id}', [PostController::class, 'update'])->name('posts.update')->middleware('auth');
+Route::get('/posts/{slug}/edit', [PostController::class, 'edit'])->name('posts.edit')->middleware('auth');
+Route::put('/posts/{slug}', [PostController::class, 'update'])->name('posts.update')->middleware('auth');
 
-Route::get('/posts/{id}/delete', [PostController::class, 'destroy'])->name('posts.destroy');
+Route::get('/posts/{slug}/destroy', [PostController::class, 'destroy'])->name('posts.destroy');
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');

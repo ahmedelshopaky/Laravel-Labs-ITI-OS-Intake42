@@ -27,10 +27,10 @@
             <td>{{$post['created_at']}}</td>
             <td>
                 <a href="{{route('posts.show',$post['slug'])}}" class="btn btn-info">View</a>
-                <a href="{{route('posts.edit',$post['id'])}}" class="btn btn-primary">Edit</a>
+                <a href="{{route('posts.edit',$post['slug'])}}" class="btn btn-primary">Edit</a>
             </td>
             <td>
-                <form id="myform" action="{{route('posts.destroy', $post->id)}}" method="get" onsubmit="return confirm('Sure?');">
+                <form id="myform" action="{{route('posts.destroy', $post->slug)}}" method="get" onsubmit="return confirm('Sure?');">
                 <button type="submit" class="btn btn-danger">Delete</button>
                 </form>
             </td>
