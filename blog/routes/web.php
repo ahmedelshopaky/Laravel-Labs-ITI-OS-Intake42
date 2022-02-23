@@ -2,7 +2,9 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\PostController;
-
+use Laravel\Socialite\Facades\Socialite;
+use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,3 +35,36 @@ Route::get('/posts/{slug}/destroy', [PostController::class, 'destroy'])->name('p
 Auth::routes();
 
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+ 
+Route::get('/auth/redirect', function () {
+    return Socialite::driver('github')->redirect();
+})->name('github.login');
+ 
+
+Route::get('/auth/callback', function () {
+    $githubUser = Socialite::driver('github')->stateless()->user();
+    
+    $user = User::where('github_id', $githubUser->id)->first();
+ 
+    if ($user) {
+        $user->update([
+            'github_token' => $githubUser->token,
+            'github_refresh_token' => $githubUser->refreshToken,
+        ]);
+    } else {
+        $user = User::create([
+            'name' => $githubUser->name,
+            'email' => $githubUser->email,
+            'github_id' => $githubUser->id,
+            'github_token' => $githubUser->token,
+            // 'github_refresh_token' => $githubUser->refreshToken,
+        ]);
+    }
+ 
+    Auth::login($user);
+ 
+    return redirect('/home');
+ 
+    // $user->token
+});
